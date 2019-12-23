@@ -7,10 +7,15 @@
 - [다트 연습용 콘솔](https://dartpad.dartlang.org/)
 - [플러터 샘플](https://flutter.dev/docs/cookbook)
 
+## VS Code 사용시 
+에물레이터로 실행 방법: <br>
+상단 메뉴중에 Debug -> Debuggin 옵션
+
+
 ## 이름 짓는법
 Camel Case 형식으로 첫글자는 소문자, 그 다음은 단어 시작 첫글자마다 대문자로 싸줍니다. 
 
-## 데이타 타입, 리턴 타입
+## Data Types, Return Types
 기존의 OOP 언어들과 비슷합니다. 
 ```
 double addNumber (double a, double b) {
@@ -78,3 +83,77 @@ void main() {
 }
 ```
 
+## Class Constructor, Named Arguments
+역시 기존의 OOP 와 흡사하지만, 조금 더 간단하게 됩니다. <br>
+Dart 에서는 해당 클래스의 이름을 한번 더 불러줌으로서 Constructor 의 역할을 합니다. <br><br>
+
+Constructor 에서 {} 컬리 브레켓으로 argument 를 감싸주면, 
+다음과 같이 argument 입력시 키 이름을 정해줄수 있습니다. 
+(Named Argument 로 만들어줍니다)
+
+```
+class Person {
+  String name; int age;
+ 
+  Person({ String inputName, int age }) {
+    
+    // variable 이름을 다르게 하면, 그냥 assign 해주면 됩니다.
+    name = inputName;
+     
+    // variable 이름을 같게 만들었다면, this를 써서 assign 합니다.
+    this.age = age;
+    
+  }
+  
+}
+
+void main() {
+  var p1 = Person(age: 33, inputName: 'Taehoon');
+  print(p1.name);
+}
+```
+<br>
+
+Argument 값들을 넣어주는게 당연한 과정일 경우에는, 더욱 간단한 방법이 있습니다. <br>
+컬리 프레킷과 this 를 이용해서 단번에 assign 해줄수 있습니다.
+
+```
+class Person {
+  String name; int age;
+  
+  Person({String this.name, int this.age});
+  
+}
+
+void main() {
+  var p1 = Person(age: 33, name: 'Taehoon');
+  print(p1.name);
+}
+```
+<br>
+
+추가적으로, 기본값을 넣어주거나, @require 를 이용한 필수값을 지정해 줄수 있습니다.
+```
+Person(@require String name, int age = 30) {...}
+```
+
+## 기본 흐름
+runApp 이 build 를 실행시키고, 그 안의 context 와 위젯들을 빌드해서
+하나의 위젯으로 리턴해서 화면서 보여줍니다. <br>
+(자세한건 코드의 코멘트 참조)
+
+```
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {  
+
+  Widget build(BuildContext context) {
+    return MaterialApp(home: Text('Hello World'));
+  }
+
+}
+```
