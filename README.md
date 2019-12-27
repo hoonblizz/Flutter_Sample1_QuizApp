@@ -194,3 +194,28 @@ class MyApp extends StatelessWidget {
 ```
 
 ## Visible / Invisible Widgets
+Output, Input 에 관련된 위젯들은 Visible, <br>
+( `RaisedButton()`, `Text()`, `Card()` ...) <br><br>
+Layout, Control 에 관련된 위젯은 Invisible 하다. <br>
+(`Row()`, `Column()`, `ListView()`, ...) <br><br>
+Invisible 위젯이 필요한 상황이란, 바로 밑의 예제에서처럼 <br>
+`home` -> `body` 그리고 바디 안에 `Text` 외에도 다른 많은 위젯을 생성하고 싶을때 사용된다.
+
+```dart
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+  
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('App bar title here'),
+        ),
+        body: Text('This is body text'),
+      ),
+    );
+
+  }
+}
+
+```
