@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('App bar title here'),
         ),
-        body: Text('This is body text'),
+        body: Column(children: <Widget>[]),
       ),
     );
   }
