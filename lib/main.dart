@@ -19,8 +19,18 @@ void main() {
   클래스 이름은 Pascal Case 로 해줍니다. (첫글자 대문자, 뒤 단어 시작 대문자)
 */
 class MyApp extends StatelessWidget {
+
+  void answerQuestion() {
+    print('Answered 1: ');
+  }
+
+  var questions = [
+    'What\'s your favorite colour?',
+    'What\'s your favorite animal?'
+  ];
+
   /*
-    Flutter 에서 제공하는 decorator 의 한 종류.
+    @override: Flutter 에서 제공하는 decorator 의 한 종류.
     없어도 돌아가는데 문제 없지만, 있다면 코드를 더 클린하게 만들수 있다.
   */
   @override
@@ -46,7 +56,30 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('App bar title here'),
         ),
-        body: Column(children: <Widget>[]),
+        body: Column(
+          children: [
+            // index 에 접근하는 방법중 하나: elementAt
+            // 혹은 그냥 [] 이걸로 접근.
+            Text(questions[0]),
+            RaisedButton(
+              child: Text('Answer button 1'),
+              // answerQuestion 와 answerQuestion() 의 차이:
+              // answerQuestion 는 포인터를 정해주는것
+              //answerQuestion() 는 실행시켜주는것.
+              onPressed: answerQuestion,
+            ),
+            RaisedButton(
+              child: Text('Answer button 2'),
+              onPressed: () => print('Answer 2 chosen'),
+            ),
+            RaisedButton(
+              child: Text('Answer button 3'),
+              onPressed: () => {
+                print('Answer 3 chosen')
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
