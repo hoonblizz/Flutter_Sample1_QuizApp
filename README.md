@@ -219,3 +219,114 @@ class MyApp extends StatelessWidget {
 }
 
 ```
+이때, Layout Widget 을 사용하면 더 많은 위젯을 알맞게 넣을수 있게 된다. <br>
+
+```dart
+...
+body: Column(
+  children: [
+    Text(questions[questionIndex]),
+    RaisedButton(
+      child: Text('Answer button 1'),
+      onPressed: answerQuestion,
+    ),
+    RaisedButton(
+      child: Text('Answer button 2'),
+      onPressed: () => print('Answer 2 chosen'),
+    ),
+    RaisedButton(
+      child: Text('Answer button 3'),
+      onPressed: () => {
+        print('Answer 3 chosen')
+      },
+    ),
+  ],
+),
+...
+```
+
+## Stateful Widget
+`State` 란? <br>
+React 의 State 처럼 앱의 데이타를 뜻한다. 즉, Stateful Widget 은 데이타가 관여되는 위젯, Stateless Widget 은 데이타가 관여되지 않은 순수한 위젯이라 할수있다.
+<br><br>
+예를들어 Stateless Widget 의 경우, <br>
+`Input Data` -> `Widget (no state)` -> `Render UI` <br>
+이처럼 위젯이 input data 만 갖고 렌더링 하게 된다. (`Text()` 처럼.) <br><br>
+하지만 Stateful Widget 의 경우, <br>
+`Input Data` -> `Widget (internal state)` -> `Render UI` <br>
+이처럼 위젯이 input data 혹은 위젯 내부의 state 에 따라 무엇을 렌더링 할건지 결정된다. <br><br>
+
+<b>Stateful Widget 만드는 방법</b>: <br>
+Stateless widget 의 경우엔, 
+```dart
+class MyApp extends StatelessWidget { ... }
+```
+이렇게 되어있는데, 여기서 StatefulWidget 이라고 바꾼다고 간단히 바뀌지는 않는다. <br>
+Stateless 와는 다르게 Stateful widget 은 두 클래스로 구성되어 있다. <br>
+<br>
+StatefulWidget 안에 `createState` 를 쳐주면 자동완성으로 <br>
+
+```dart
+@override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return null;
+  }
+```
+이렇게 완성된다. <br>
+이 내용을 살펴보면, `createState` 는 아무런 argument 없이 <br>
+`StatefulWidget` 에 속하는 `State` 타입의 데이타를 리턴해준다. <br>
+여기에 `State` 를 extend 해주는 클래스를 만들어서 연결시켜 줌으로서 비로소 Stateful widget 이 된다. 
+<br><br>
+
+그리고 State 에 변화를 줌으로 해서 렌더링이 생기는데, State 값을 직접적으로 바꾸는것은 효과가 없고, `setState` 를 이용해서 바꿔줘야만 한다.<br>
+
+```dart
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return MyAppState();
+  }
+}
+
+// State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다. 
+// State 가 Generic type 이기 때문.
+class MyAppState extends State<MyApp> {
+  var questionIndex = 0;
+
+  void answerQuestion() {
+
+    // setState 로 State 에 변화를 준다.
+    setState(() {
+      questionIndex++;
+    });
+
+  }
+
+  var questions = [
+    'What\'s your favorite colour?',
+    'What\'s your favorite animal?',
+    'A', 
+    'B'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('App bar title here'),
+        ),
+        body: Column(
+          children: [
+            Text(questions[questionIndex]),
+            RaisedButton(
+              child: Text('Answer button 1'),
+              onPressed: answerQuestion,
+            ),
+
+    ......
+  }
+}
+```

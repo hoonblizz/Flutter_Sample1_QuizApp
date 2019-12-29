@@ -18,15 +18,32 @@ void main() {
 /*
   클래스 이름은 Pascal Case 로 해줍니다. (첫글자 대문자, 뒤 단어 시작 대문자)
 */
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return MyAppState();
+  }
+}
+
+// State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다. 
+// State 가 Generic type 이기 때문.
+class MyAppState extends State<MyApp> {
+
+  var questionIndex = 0;
 
   void answerQuestion() {
+    setState(() {
+      questionIndex++;
+    });
     print('Answered 1: ');
   }
 
   var questions = [
     'What\'s your favorite colour?',
-    'What\'s your favorite animal?'
+    'What\'s your favorite animal?',
+    'A', 
+    'B'
   ];
 
   /*
@@ -60,7 +77,7 @@ class MyApp extends StatelessWidget {
           children: [
             // index 에 접근하는 방법중 하나: elementAt
             // 혹은 그냥 [] 이걸로 접근.
-            Text(questions[0]),
+            Text(questions[questionIndex]),
             RaisedButton(
               child: Text('Answer button 1'),
               // answerQuestion 와 answerQuestion() 의 차이:
