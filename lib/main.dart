@@ -4,6 +4,7 @@
   이것덕분에 밑에 StatelessWidget 을 상속받을수 있습니다.
 */
 import 'package:flutter/material.dart';
+import './question.dart';   // question 파일을 부른다
 
 void main() {
   /*
@@ -22,19 +23,19 @@ class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyAppState();
+    return _MyAppState();
   }
 }
 
 // State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다. 
 // State 가 Generic type 이기 때문.
-class MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> {
 
-  var questionIndex = 0;
+  var _questionIndex = 0;
 
-  void answerQuestion() {
+  void _answerQuestion() {
     setState(() {
-      questionIndex++;
+      _questionIndex++;
     });
     print('Answered 1: ');
   }
@@ -75,15 +76,16 @@ class MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            // index 에 접근하는 방법중 하나: elementAt
-            // 혹은 그냥 [] 이걸로 접근.
-            Text(questions[questionIndex]),
+            // question 파일에서 생성한 Question class
+            Question(
+              questions[_questionIndex]
+            ),
             RaisedButton(
               child: Text('Answer button 1'),
               // answerQuestion 와 answerQuestion() 의 차이:
               // answerQuestion 는 포인터를 정해주는것
               //answerQuestion() 는 실행시켜주는것.
-              onPressed: answerQuestion,
+              onPressed: _answerQuestion,
             ),
             RaisedButton(
               child: Text('Answer button 2'),

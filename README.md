@@ -330,3 +330,132 @@ class MyAppState extends State<MyApp> {
   }
 }
 ```
+
+## Private Property
+다른 OOP 언어들처럼 Private 은 다른 클래스가 엑세스하는것을 막아준다. <br>
+다트에서 Private 적용하는 방법은, `_` 언더스코어 를 이름앞에 붙여주는것. <br><br>
+밑의 예제에서 보면, <br>
+`_MyAppState` 처럼 클래스에 붙일수도 있고, <br>
+`_questionIndex` 처럼 variable 에 붙여도 되고, <br>
+`_answerQuestion` 처럼 function / method 에 붙일수도 있다. <br>
+
+```dart
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex++;
+    });
+    print('Answered 1: ');
+  }
+  ....
+```
+
+## 새 위젯 추가하기
+보통은 한 dart 파일에 하나의 위젯이 들어가는게 이상적이다. (가끔 예외가 있을수는 있어도) <br>
+새 위젯을 추가하려면, `lib` 폴더에 dart 파일을 추가하고, 그 파일 가장 첫출에 <br>
+`st` 라고 쳐보면, VSCode 의 recommendation이 나온다. <br>
+예를들어, `Flutter stateful widget`, `Flutter stateless widget`... <br>
+이중에서 그냥 선택하기만 하면 기본 코드가 준비된다.
+<br><br>
+이 예제에서 `question.dart` 라는 파일을 만들고, `Question` 이라는 stateless 클래스를 만들었다.
+<br>
+이제 `main.dart` 에 있는 variable 을 `question.dart` 로 가져와서 쓰는법을 알아보자. 
+<br>
+`question.dart` 에서 Constructor 로 variable 값을 선언해주고, <br>
+`main.dart` 에서 `import` 로 불러온 다음에 곧바로 class 이름으로 사용해주면 된다.<br>
+
+### question.dart
+```dart
+import 'package:flutter/material.dart';
+
+class Question extends StatelessWidget {
+
+  // final 은 이 variable 이 바뀌지 않는다는걸 의미합니다. reassign 이 안됩니다.
+  final String questionText; 
+
+  // Constructor 입니다. 
+  Question(this.questionText);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(questionText);
+  }
+}
+```
+### main.dart
+```dart
+import 'package:flutter/material.dart';
+import './question.dart';   // question 파일을 부른다
+
+...
+
+class _MyAppState extends State<MyApp> {
+
+  ...
+
+  Widget build(BuildContext context) {
+    
+    ...
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('App bar title here'),
+        ),
+        body: Column(
+          children: [
+            // question 파일에서 생성한 Question class
+            Question(
+              questions[_questionIndex]
+            ),
+            
+            ...
+
+```
+
+## Styling, Layouting
+예를들어 `Text()` 를 스타일링 해준다고 하면, <br>
+Named argument 로 `style` 이라는게 있다. <br>
+그리고 style 위에 마우스를 올려보면, `TextStyle()` 이 들어간다고 하는데, <br>
+`TextStyle()` 을 써주고 또 마우스를 올려보면, 갖가지 옵션들이 나온다. <br>
+예를들어, `color`, `fontSize`, 기타등등. <br>
+<br>
+또 다른 named argument 예로는, `textAlign` 이 있다. 역시 똑같이 마우스를 올려보면, `TextAlign` 이 들어가고, 이 위에 마우스를 올려보면, `enum` 이라고 하면서 설명이 나오는데, <br>
+`enum` 이란 미리 준비된 값이 있다는 뜻이다. 그러므로 `TextAlign`에 `.` 점을 붙여보면, 사용가능한 옵션들이 나온다.<br>
+기본적으로 이런식으로 안에 들어가는 data type 과 return type 을 알아가면서 쓰면 된다. <br>
+
+```dart
+class Question extends StatelessWidget {
+  // final 은 이 variable 이 바뀌지 않는다는걸 의미합니다. reassign 이 안됩니다.
+  final String questionText;
+
+  // Constructor 입니다.
+  Question(this.questionText);
+
+  @override
+  Widget build(BuildContext context) {
+
+    // CSS 하듯이 구조를 잡아준다.
+    // padding 과 margin 도 CSS 와 컨셉이 똑같다. 
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(20), // EdgeInsets.only(...) 는 일부분만 적용 할때.
+      child: Text(
+        questionText,
+        style: TextStyle(fontSize: 28),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+```
