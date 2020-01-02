@@ -432,6 +432,7 @@ Named argument 로 `style` 이라는게 있다. <br>
 <br>
 또 다른 named argument 예로는, `textAlign` 이 있다. 역시 똑같이 마우스를 올려보면, `TextAlign` 이 들어가고, 이 위에 마우스를 올려보면, `enum` 이라고 하면서 설명이 나오는데, <br>
 `enum` 이란 미리 준비된 값이 있다는 뜻이다. 그러므로 `TextAlign`에 `.` 점을 붙여보면, 사용가능한 옵션들이 나온다.<br>
+(Tip: `Cmd` 누르고 `TextAlign()` 에 마우스를 후버 해보면, 링크가 되어있다. 클릭해서 들어가보면 더 자세한 설명이 나온다) <br><br>
 기본적으로 이런식으로 안에 들어가는 data type 과 return type 을 알아가면서 쓰면 된다. <br>
 
 ```dart
@@ -457,5 +458,62 @@ class Question extends StatelessWidget {
       ),
     );
   }
+}
+```
+
+## Multiple / Extra Constructor
+한 클래스에서 쉽게 Constructor 를 preset 하는 방법이 있다. <br>
+예를들어 두명의 유저를 만들어야 할때, 보통은 <br>
+
+```dart
+class Person {
+  String name;
+  int age;
+  
+  Person({String this.name, int this.age});
+  
+}
+
+
+void main() {
+  
+  var p1 = Person(age: 33, name: 'Taehoon');
+  var p2 = Person(age: 22, name: 'Taehoon2');
+  
+  print(p1.name);
+  print(p2.name);
+  
+}
+```
+
+이렇게 값을 하나씩 넣어주면서 생성해야 하지만, 만약 preset 이 가능한 부분이 있다면,<br>
+다음과 같이 클래스 안에서 또다시 Constructor 를 만들어주는게 가능하다. <br>
+
+```dart
+class Person {
+  String name;
+  int age;
+  
+  // Constructor 1
+  Person({String this.name, int this.age});
+  
+  // Constructor 2 - 이런식으로 사용 가능
+  Person.presetTaehoon({String this.name}) {
+    age = 72;
+  }
+  
+}
+
+
+void main() {
+  
+  var p1 = Person(age: 33, name: 'Taehoon');
+  var p2 = Person(age: 22, name: 'Taehoon2');
+  var p3 = Person.presetTaehoon(name: 'Taehoon3');
+  
+  print(p1.name);
+  print(p2.name);
+  print('${p3.name}: ${p3.age}');
+  
 }
 ```
