@@ -517,3 +517,50 @@ void main() {
   
 }
 ```
+
+## Map
+`map` 은 javascript 에서 object 와 비슷한 개념이다. 
+
+```dart
+var questions = [
+    {
+      'questionText': 'What\'s your favorite colour?', 
+      'answers': ['Black', 'red', 'green', 'white']
+    },
+    {
+      'questionText': 'What\'s your favorite animal?', 
+      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion']
+    },
+    {
+      'questionText': 'What\'s your favorite food?', 
+      'answers': ['Pizza', 'Burgur', 'Pasta', 'Kimchi']
+    },
+  ];
+
+  print(questions[0]['questionText']);
+```
+하지만 javascript 처럼 `questions[0].questionText` 이런 신택스로는 쓸수 없다. <br>
+<br>
+그러면 `map` 을 사용할때는 어떨까? <br>
+javascript 하듯이 다음 과 같이 해보면, 에러가 난다.
+
+```dart
+// 이미 생성된 object 에서 answer 부분을 map 으로 돌려주고 싶다. 
+questions[_questionIndex]['answers'].map((answer) {
+  return Answer(answer);
+})
+```
+이유는, dart 가 `questions[_questionIndex]['answers']` 의 데이타 타입이 array 인걸 알수 없어서 그런것. 이 부분을 확실히 해줘야 한다.<br>
+
+```dart
+...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+  return Answer(_answerQuestion, answer);
+}).toList()
+```
+
+뭔가 많이 달라보이는데, 하나하나 짚어보면, <br>
+`as List<String>` 으로 `questions[_questionIndex]['answers']` 가 String 으로 구성된 리스트임을 확실히 해둔다. <br>
+뒤에 `.toList()` 로 `map` 이 `List` 로 전환되게 한다. <br> 
+앞에 `...` Spread operator 로 `List`로 전환 된 값들을 밖으로 뽑아내서 붙여준다.<br> 
+javascript 에서의 spread operator 는 deep copy 를 해주는건데, 아마 비슷할듯 하다. <br>
+

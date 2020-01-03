@@ -4,7 +4,8 @@
   이것덕분에 밑에 StatelessWidget 을 상속받을수 있습니다.
 */
 import 'package:flutter/material.dart';
-import './question.dart';   // question 파일을 부른다
+import './question.dart'; // question 파일을 부른다
+import './answer.dart';
 
 void main() {
   /*
@@ -27,10 +28,9 @@ class MyApp extends StatefulWidget {
   }
 }
 
-// State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다. 
+// State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다.
 // State 가 Generic type 이기 때문.
 class _MyAppState extends State<MyApp> {
-
   var _questionIndex = 0;
 
   void _answerQuestion() {
@@ -41,10 +41,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   var questions = [
-    'What\'s your favorite colour?',
-    'What\'s your favorite animal?',
-    'A', 
-    'B'
+    {
+      'questionText': 'What\'s your favorite colour?',
+      'answers': ['Black', 'red', 'green', 'white']
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion']
+    },
+    {
+      'questionText': 'What\'s your favorite food?',
+      'answers': ['Pizza', 'Burgur', 'Pasta', 'Kimchi']
+    },
   ];
 
   /*
@@ -77,26 +85,11 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             // question 파일에서 생성한 Question class
-            Question(
-              questions[_questionIndex]
-            ),
-            RaisedButton(
-              child: Text('Answer button 1'),
-              // answerQuestion 와 answerQuestion() 의 차이:
-              // answerQuestion 는 포인터를 정해주는것
-              //answerQuestion() 는 실행시켜주는것.
-              onPressed: _answerQuestion,
-            ),
-            RaisedButton(
-              child: Text('Answer button 2'),
-              onPressed: () => print('Answer 2 chosen'),
-            ),
-            RaisedButton(
-              child: Text('Answer button 3'),
-              onPressed: () => {
-                print('Answer 3 chosen')
-              },
-            ),
+            Question(questions[_questionIndex]['questionText']),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
