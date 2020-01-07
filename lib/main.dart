@@ -4,8 +4,8 @@
   이것덕분에 밑에 StatelessWidget 을 상속받을수 있습니다.
 */
 import 'package:flutter/material.dart';
-import './question.dart'; // question 파일을 부른다
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() {
   /*
@@ -31,16 +31,7 @@ class MyApp extends StatefulWidget {
 // State<MyApp> 은 State 가 MyApp 에 속한다 라는걸 나타내 준다.
 // State 가 Generic type 이기 때문.
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-
-  void _answerQuestion() {
-    setState(() {
-      _questionIndex++;
-    });
-    print('Answered 1: ');
-  }
-
-  var questions = [
+  final _questions = const [
     {
       'questionText': 'What\'s your favorite colour?',
       'answers': ['Black', 'red', 'green', 'white']
@@ -54,6 +45,17 @@ class _MyAppState extends State<MyApp> {
       'answers': ['Pizza', 'Burgur', 'Pasta', 'Kimchi']
     },
   ];
+
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    if (_questionIndex < _questions.length) {
+      setState(() {
+        _questionIndex++;
+      });
+      print('Answered 1: ');
+    }
+  }
 
   /*
     @override: Flutter 에서 제공하는 decorator 의 한 종류.
@@ -82,16 +84,13 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('App bar title here'),
         ),
-        body: Column(
-          children: [
-            // question 파일에서 생성한 Question class
-            Question(questions[_questionIndex]['questionText']),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-          ],
-        ),
+        body: (_questionIndex < _questions.length)
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(),
       ),
     );
   }

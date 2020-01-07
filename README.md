@@ -18,7 +18,8 @@ Control + Space
 거기 나온 키 외우고, 코드에 적용시켜보기 <br>
 `Shift + option(alt) + F` <br>
 이걸 위해서는 `,` <- 이걸 적절히 잘 붙여주는게 중요! 
-
+### 가능한 argument 보기
+예를들어 `Quiz()` 가 있으면, ( )안에 커서를 넣고, `control + space`. <br> 
 
 ## 이름 짓는법
 Camel Case 형식으로 첫글자는 소문자, 그 다음은 단어 시작 첫글자마다 대문자로 싸줍니다. 
@@ -564,3 +565,123 @@ questions[_questionIndex]['answers'].map((answer) {
 앞에 `...` Spread operator 로 `List`로 전환 된 값들을 밖으로 뽑아내서 붙여준다.<br> 
 javascript 에서의 spread operator 는 deep copy 를 해주는건데, 아마 비슷할듯 하다. <br>
 
+## final vs const
+`final`은 runtime 때부터 정해진 값이다. `const` 는 코드가 돌아가는 동안에 바뀌지 않도록 결정된 값이다. <br>
+예를들어, 어떤 iterator 가 있고, 그 안에 `final` 을 쓰면, iterator가 무슨짓을 해도 절대 변하지 않는다. 하지만 `const` 를 쓰면, 해당 iterator 안에서 불변하는 값으로 쓰이는것. <br><br>
+이걸 써주는데 두가지 방법이 있다. 하나는 variable 이름 앞에 붙여주는것. 다른 하나는 실제 value 앞에 붙여주는것. 
+```dart
+// 두 장소에 쓰일수 있다.
+const dummy = const ['Hello'];
+```
+variable 이름 앞에 붙이면 말 그대로 그 variable 자체가 묶이게 된다. 예를들어, 
+```dart
+const dummy = ['Hello'];
+dummy = [];   // 에러
+```
+실제 value 앞에 써주면, value 를 바꾸는 행위를 못하게 된다. 
+```dart
+var dummy = const ['Hello'];
+dummy.add('Max'); // 에러
+```
+<br>
+
+## Splitting App (앱 쪼개기)
+예를들어, 다음의 코드가 있다고 하자.
+```dart
+return MaterialApp(
+  home: Scaffold(
+    appBar: AppBar(
+      title: Text('App bar title here'),
+    ),
+    body: (_questionIndex < questions.length)
+        ? Column(
+            children: [
+              // question 파일에서 생성한 Question class
+              Question(questions[_questionIndex]['questionText']),
+              ...(questions[_questionIndex]['answers'] as List<String>)
+                  .map((answer) {
+                return Answer(_answerQuestion, answer);
+              }).toList()
+            ],
+          )
+        : Center(
+            child: Text('You did it!'),
+          ),
+  ),
+);
+```
+코드가 조금 복잡해지거나, 혹은 추후에 복잡해질 가능성이 있다면 일단 쪼개주는게 좋다. <br>
+위의 예제에서 `body` 부분을 조건문으로 나눠줌으로 해서 일단 한눈에 들어오기 어렵게 되었고, 나중에 각각의 조건문이 더욱 복잡해질 가능성이 있다고 가정하고 이걸 쪼개보도록 한다. <br><br>
+우선 추가적으로 `dart` 파일을 만들어준다. `quiz.dart`, `result.dart` 정도가 좋겠다. <br>
+
+### quiz.dart
+```dart
+import 'package:flutter/material.dart';
+import './question.dart';
+import './answer.dart';
+
+class Quiz extends StatelessWidget {
+
+  final List<Map<String, Object>> questions;
+  final int questionIndex;
+  final Function answerQuestion;
+
+  // @required 를 쓰려면 named argument 로 만들어 줘야 하기 때문에, 
+  // main.dart 에서 named 로 만들어준다.
+  Quiz({
+    @required this.questions, 
+    @required this.answerQuestion, 
+    @required this.questionIndex
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // question 파일에서 생성한 Question class
+        Question(questions[questionIndex]['questionText']),
+        ...(questions[questionIndex]['answers'] as List<String>).map((answer) {
+          return Answer(answerQuestion, answer);
+        }).toList()
+      ],
+    );
+  }
+}
+
+```
+
+### result.dart
+```dart
+import 'package:flutter/material.dart';
+
+class Result extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('You did it!'),
+    );
+  }
+}
+```
+
+### main.dart
+```dart
+...
+...
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(
+        title: Text('App bar title here'),
+      ),
+      body: (_questionIndex < _questions.length)
+          ? Quiz(
+              answerQuestion: _answerQuestion,  // @ required 쓰기 위해 named 로 만든다.
+              questionIndex: _questionIndex,
+              questions: _questions,
+            )
+          : Result(),
+    ),
+  );
+}
+```
