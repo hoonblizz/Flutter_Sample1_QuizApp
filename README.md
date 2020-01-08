@@ -1,25 +1,55 @@
 # flutter_sample_quiz_app
 
-연습용 프로젝트
+연습용 프로젝트 입니다. 
+소스: [Learn Flutter & Dart to Build iOS & Android Apps](https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps)
+<br>
+
+## Index
+| Title | Desc |  
+| :--- | :---:  | 
+| [Data Types, Return Types](#data-types-return-types) | ..|
+| [Class](#class) | ..|
+| [Class Constructor, Named Arguments](#class-constructor-named-arguments) | ..|
+|[Basic Flow](#basic-flow) | ..|
+|[UI Tree Structure](#ui-tree-structure) | ..|
+|[Visible / Invisible Widgets](#visible--invisible-widgets) | ..|
+|[Stateful Widget](#stateful-widget) | ..|
+|[Private Property](#private-property) | ..|
+|[Adding New Widgets](#adding-new-widgets) | ..|
+|[Styling, Layouting](#styling-layouting) | ..|
+|[Multiple / Extra Constructor](#multiple--extra-constructor) | ..|
+|[Map](#map) | ..|
+|[final vs const](#final-vs-const) | ..|
+|[Splitting App](#splitting-app) | ..|
+|[Getter](#getter) | ..|
+
 
 ## 유용한 사이트들
 
 - [다트 연습용 콘솔](https://dartpad.dartlang.org/)
 - [플러터 샘플](https://flutter.dev/docs/cookbook)
 
-## VS Code 사용시 
+## VS Code 사용팁
 ### 에물레이터로 실행 방법: <br>
 상단 메뉴중에 Debug -> Debuggin 옵션
-### 위젯 옵션 보기:
-Control + Space
 ### 코드를 Readable 하게 줄 맞추기:
 상단에 Code -> Preferences -> Keyboard shortcuts <br>
 서치바에 format document 찾기 <br>
 거기 나온 키 외우고, 코드에 적용시켜보기 <br>
 `Shift + option(alt) + F` <br>
 이걸 위해서는 `,` <- 이걸 적절히 잘 붙여주는게 중요! 
-### 가능한 argument 보기
+### 가능한 argument 나 위젯 옵션 보기
 예를들어 `Quiz()` 가 있으면, ( )안에 커서를 넣고, `control + space`. <br> 
+### Refactoring
+예를들어 
+```dart
+return Center(
+      child: Text(...
+```
+이렇게 되어있는 코드가 있는데, `Text` 부분을 `Column` 으로 감싸고 싶을때, `Refactoring` 옵션이 필요.<br>
+상단에 `Code -> Preference -> Keyboard Shortcut` <br>
+그리고 `refactor` 를 찾아보면 단축키가 나온다. 내 경우에는 `Shift + Control + R`. <br>
+`Text` 부분에 마우스를 찍어주고 단축키를 누르면 옵션들이 나온다. 
 
 ## 이름 짓는법
 Camel Case 형식으로 첫글자는 소문자, 그 다음은 단어 시작 첫글자마다 대문자로 싸줍니다. 
@@ -146,7 +176,7 @@ void main() {
 Person(@require String name, int age = 30) {...}
 ```
 
-## 기본 흐름
+## Basic Flow
 `runApp` 이 build 를 실행시키고, 그 안의 `context` 와 위젯들을 빌드해서
 하나의 위젯으로 리턴해서 화면서 보여줍니다. <br>
 (자세한건 코드의 코멘트 참조)
@@ -167,7 +197,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-## UI 트리 구조
+## UI Tree Structure
 플러터는 모든것이 위젯이고, 모든 위젯은 트리 구조로 이루어져야 합니다. <br>
 다음의 예제에서 보면, `MaterialApp` 안의 `home` 이라는 named argument 에 <br>
 UI specification 을 담당하는 `Scaffold` 가 들어가 있고, <br>
@@ -361,7 +391,7 @@ class _MyAppState extends State<MyApp> {
   ....
 ```
 
-## 새 위젯 추가하기
+## Adding New Widgets
 보통은 한 dart 파일에 하나의 위젯이 들어가는게 이상적이다. (가끔 예외가 있을수는 있어도) <br>
 새 위젯을 추가하려면, `lib` 폴더에 dart 파일을 추가하고, 그 파일 가장 첫출에 <br>
 `st` 라고 쳐보면, VSCode 의 recommendation이 나온다. <br>
@@ -585,7 +615,7 @@ dummy.add('Max'); // 에러
 ```
 <br>
 
-## Splitting App (앱 쪼개기)
+## Splitting App
 예를들어, 다음의 코드가 있다고 하자.
 ```dart
 return MaterialApp(
@@ -685,3 +715,39 @@ Widget build(BuildContext context) {
   );
 }
 ```
+
+## Getter
+`Getter` 란 method 와 property 를 합쳐놓은 것입니다. <br>
+예를들어, <br>
+
+### result.dart
+```dart
+class Result extends StatelessWidget {
+  int totalScore;
+
+  Result({this.totalScore}); // {} 를 이용해서 named argument 로 만들어 줍니다.
+
+  String get resultPhase {    // Getter 입니다.
+    var resultText = 'You did it! ${totalScore}';
+    if (totalScore < 5) {
+      resultText = 'Total score is not high! ${totalScore}';
+    } else if (totalScore <= 10) {
+      resultText = 'Total score is high! ${totalScore}';
+    }
+    return resultText;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        resultPhase,
+        style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+```
+
+리턴타입 그리고 `get` 을 붙임으로 Getter 를 만들수 있습니다.  <br>
+Getter 에는 argument 가 못들어가므로, 주의해서 써야합니다.
