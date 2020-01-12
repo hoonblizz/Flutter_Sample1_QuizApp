@@ -1,8 +1,10 @@
 # flutter_sample_quiz_app
 
-연습용 프로젝트 입니다. 
+연습용 프로젝트 입니다. <br>
 소스: [Learn Flutter & Dart to Build iOS & Android Apps](https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps)
 <br>
+
+![completed sample](/flutter_sampleApp_1.gif)
 
 ## Index
 | Title | Desc |  
@@ -751,3 +753,4 @@ class Result extends StatelessWidget {
 
 리턴타입 그리고 `get` 을 붙임으로 Getter 를 만들수 있습니다.  <br>
 Getter 에는 argument 가 못들어가므로, 주의해서 써야합니다.
+
